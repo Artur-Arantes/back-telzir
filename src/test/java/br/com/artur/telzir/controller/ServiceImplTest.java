@@ -19,6 +19,7 @@ import br.com.artur.telzir.service.imp.PlanoServiceImpl;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
+import javax.annotation.meta.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -72,9 +73,7 @@ public class ServiceImplTest {
     @Test
     @DisplayName("testando o sucesso do metodo com taxa do plano")
     public void calculadora_success() {
-      String nome = "AnyName";
       final var plano = mock(Plano.class);
-      final var dto = mock(ValorPorMinutoDto.class);
       final var valorMin = mock(TabelaValorPorMinuto.class);
       final var valor = ValorPorMinutoOutPutDto.builder()
           .taxaNormalDaLigacao(new BigDecimal("76.00"))
@@ -83,18 +82,12 @@ public class ServiceImplTest {
           .tempo(new BigDecimal("40"))
           .comFaleMais(new BigDecimal("20.9000"))
           .build();
-      when(dto.getIdPlano()).thenReturn(2L);
-      when(valorMin.getTaxaNormalPorMinuto()).thenReturn(new BigDecimal("1.90"));
-      when(dto.getTempo()).thenReturn(new BigDecimal(40));
-      when(dto.getDddOrigem()).thenReturn(11);
-      when(dto.getDddDestino()).thenReturn(16);
-      when(plano.getId()).thenReturn(2L);
       when(plano.getTempoDoPlano()).thenReturn(new BigDecimal("30"));
-      when(planoRepository.findById(dto.getIdPlano())).thenReturn(Optional.of(plano));
-
+      when(planoRepository.findById(2L)).thenReturn(Optional.of(plano));
       when(valorPorMinutoRepository.findByDddOrigemAndDddDestino(any(), any()))
           .thenReturn(Optional.of(valorMin));
-      assertThat(planoService.calculadora(dto)).isEqualTo(valor);
+      when(valorMin.getTaxaNormalPorMinuto()).thenReturn(new BigDecimal("1.90"));
+      assertThat(planoService.calculadora(11, 16, BigDecimal.valueOf(40), 2l)).isEqualTo(valor);
     }
   }
 
@@ -103,12 +96,9 @@ public class ServiceImplTest {
   public void calculadora_fail() {
     final var plano = mock(Plano.class);
     final var dto = mock(ValorPorMinutoDto.class);
-    when(dto.getTempo()).thenReturn(new BigDecimal(40));
-    when(dto.getDddOrigem()).thenReturn(11);
-    when(dto.getDddDestino()).thenReturn(16);
     when(planoRepository.findById(dto.getIdPlano())).thenReturn(Optional.empty());
     assertThatExceptionOfType(PlanoInvalidoException.class).isThrownBy(() ->
-        planoService.calculadora(dto));
+        planoService.calculadora(11, 16, BigDecimal.valueOf(40), BigDecimal.ZERO.longValue()));
 
   }
 
@@ -126,17 +116,12 @@ public class ServiceImplTest {
         .tempo(new BigDecimal("30"))
         .comFaleMais(BigDecimal.ZERO)
         .build();
-    when(dto.getIdPlano()).thenReturn(2L);
     when(valorMin.getTaxaNormalPorMinuto()).thenReturn(new BigDecimal("1.90"));
-    when(dto.getTempo()).thenReturn(new BigDecimal(30));
-    when(dto.getDddOrigem()).thenReturn(11);
-    when(dto.getDddDestino()).thenReturn(16);
-    when(plano.getId()).thenReturn(2L);
     when(plano.getTempoDoPlano()).thenReturn(new BigDecimal("30"));
-    when(planoRepository.findById(dto.getIdPlano())).thenReturn(Optional.of(plano));
+    when(planoRepository.findById(2L)).thenReturn(Optional.of(plano));
 
     when(valorPorMinutoRepository.findByDddOrigemAndDddDestino(any(), any()))
         .thenReturn(Optional.of(valorMin));
-    assertThat(planoService.calculadora(dto)).isEqualTo(valor);
+    assertThat(planoService.calculadora(11, 16, BigDecimal.valueOf(30), 2L)).isEqualTo(valor);
   }
 }

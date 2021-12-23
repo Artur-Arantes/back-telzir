@@ -40,33 +40,35 @@ public class PlanoServiceImpl implements PlanoService {
 
   @Override
   @Transactional
-  public ValorPorMinutoOutPutDto calculadora(final @NonNull ValorPorMinutoDto dto) {
-    log.info("Recebendo Plano: {0}", dto);
+  public ValorPorMinutoOutPutDto calculadora(final  Integer dddOrigem,
+                                             final  Integer dddDestino,
+                                             final  BigDecimal tempo, final Long plano) {
+    log.info("Recebendo Plano: {0}", dddOrigem, dddDestino,tempo,plano);
     final var outPutDto = new ValorPorMinutoOutPutDto();
 
-    outPutDto.setTempo(dto.getTempo());
-    outPutDto.setDddDestino(dto.getDddDestino());
-    outPutDto.setDddOrigem(dto.getDddOrigem());
+    outPutDto.setTempo(tempo);
+    outPutDto.setDddDestino(dddDestino);
+    outPutDto.setDddOrigem(dddOrigem);
 
     final var planoSelecionado =
-        planoRepository.findById(dto.getIdPlano())
-            .filter(plano -> !plano.getId().equals(SEM_PLANO))
+        planoRepository.findById(plano)
+            .filter(p -> !plano.equals(SEM_PLANO))
             .orElseThrow(PlanoInvalidoException::new);
 
     outPutDto.setPlano(planoSelecionado.getNome());
 
     final var taxaNormalDaLigacao =
-        valorPorMinutoRepository.findByDddOrigemAndDddDestino(dto.getDddOrigem(),
-            dto.getDddDestino()).orElseThrow(DddOrigemOuDestinoInvalidos::new);
+        valorPorMinutoRepository.findByDddOrigemAndDddDestino(dddOrigem,
+            dddDestino).orElseThrow(DddOrigemOuDestinoInvalidos::new);
 
     final var resultadoSemPlano =
-        taxaNormalDaLigacao.getTaxaNormalPorMinuto().multiply(dto.getTempo());
+        taxaNormalDaLigacao.getTaxaNormalPorMinuto().multiply(tempo);
 
     outPutDto.setTaxaNormalDaLigacao(resultadoSemPlano);
 
     final var tempoDoPlano = planoSelecionado.getTempoDoPlano();
 
-    final var tempoRestante = dto.getTempo().subtract(tempoDoPlano);
+    final var tempoRestante = tempo.subtract(tempoDoPlano);
 
     if (tempoRestante.compareTo(BigDecimal.ZERO) > 0) {
       final var valorLigacaoMutiplcadoPelaTaxa =

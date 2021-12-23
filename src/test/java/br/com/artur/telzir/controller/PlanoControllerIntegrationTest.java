@@ -112,13 +112,12 @@ public class PlanoControllerIntegrationTest {
       @Test
       @DisplayName("testando o sucesso do metodo ")
       public void success() throws Exception {
-        ValorPorMinutoDto dto = ValorPorMinutoDto.builder()
-            .dddOrigem(11).dddDestino(16).idPlano(2L)
-            .tempo(new BigDecimal(40))
-            .build();
 
         final var requisicao = RestAssured.given().headers(headers)
-            .body(dto)
+            .param("dddOrigem", 11)
+            .param("dddDestino", 16)
+            .param("tempo", 40)
+            .param("id_plan", 2L)
             .when()
             .get("api/plano/busca/")
             .then()
@@ -130,8 +129,8 @@ public class PlanoControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("testando falha com o dto null")
-    public void fail_dto_null() {
+    @DisplayName("testando falha com os param null")
+    public void fail_params_null() {
 
       final var requisicao = RestAssured.given().headers(headers)
           .when()
@@ -167,8 +166,10 @@ public class PlanoControllerIntegrationTest {
         .build();
 
     final var requisicao = RestAssured.given().headers(headers)
-        .body(dto)
-        .when()
+        .param("dddOrigem", 12)
+        .param("dddDestino", 23)
+        .param("tempo", 40)
+        .param("id_plan", 2L).when()
         .get("api/plano/busca/")
         .then()
         .statusCode(HttpStatus.BAD_REQUEST.value());
@@ -183,7 +184,10 @@ public class PlanoControllerIntegrationTest {
         .build();
 
     final var requisicao = RestAssured.given().headers(headers)
-        .body(dto)
+        .param("dddOrigem",11)
+        .param("dddDestino",16)
+        .param("tempo", 40)
+        .param("id_plan",1L)
         .when()
         .get("api/plano/busca/")
         .then()

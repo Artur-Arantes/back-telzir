@@ -7,13 +7,14 @@ import br.com.artur.telzir.domain.dto.PlanoOutPutDto;
 import br.com.artur.telzir.domain.dto.ValorPorMinutoDto;
 import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
 import br.com.artur.telzir.service.PlanoService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,7 +32,11 @@ public class PlanoController {
 
   @Transactional
   @RequestMapping(method = GET, value = "/busca")
-  public ValorPorMinutoOutPutDto busca(final @NonNull @RequestBody ValorPorMinutoDto dto) {
-    return service.calculadora(dto);
+  public ValorPorMinutoOutPutDto busca(final @NonNull @RequestParam("dddOrigem") Integer dddOrigem,
+                                       final @NonNull @RequestParam("dddDestino") Integer dddDestino,
+                                       final @NonNull @RequestParam("tempo") BigDecimal tempo,
+                                       final @NonNull @RequestParam("id_plan") Long plano
+                                       ) {
+    return service.calculadora(dddOrigem,dddDestino, tempo, plano);
   }
 }
