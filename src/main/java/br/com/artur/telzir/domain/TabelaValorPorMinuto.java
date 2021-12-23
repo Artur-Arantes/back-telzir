@@ -1,5 +1,6 @@
 package br.com.artur.telzir.domain;
 
+import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,34 +9,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "valor_por_minuto")
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
+@Generated
+@EqualsAndHashCode(of="id")
 public class TabelaValorPorMinuto {
 
   @Id
   @GeneratedValue
-  @Column(name = "id_tab")
+  @Column(name = "id_val_min")
   private Long id;
 
-  @Column(name = "ddd_ori_tab")
-  private String dddOrigem;
+  @Column(name = "ddd_ori_val_min")
+  private Integer dddOrigem;
 
-  @Column(name = "ddd_dest_tab")
-  private String dddDestino;
+  @Column(name = "ddd_des_val_min")
+  private Integer dddDestino;
 
-  @Column(name = "val_min_val_min ")
+  @Column(name = "val_min_val_min")
   private BigDecimal taxaNormalPorMinuto;
-
 
 }

@@ -24,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class Plano {
 
   @Id
@@ -32,7 +32,7 @@ public class Plano {
   @Column(name = "id_plan")
   private Long id;
 
-  @Column(name = "id_nom")
+  @Column(name = "nom_plan")
   private String nome;
 
   @Column(name = "temp_ise_plan")

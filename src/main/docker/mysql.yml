@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  offnanceaplpication-mysql:
+  telzirapplication-mysql:
     image:  mysql:5.7
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes

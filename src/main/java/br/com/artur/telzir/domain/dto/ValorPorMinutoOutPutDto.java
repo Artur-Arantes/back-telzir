@@ -32,10 +32,10 @@ public class ValorPorMinutoOutPutDto {
   private BigDecimal taxaNormalDaLigacao;
 
   @JsonProperty("dddOrigem")
-  private String dddOrigem;
+  private Integer dddOrigem;
 
   @JsonProperty("dddDestino")
-  private String dddDestino;
+  private Integer dddDestino;
 
 
 }

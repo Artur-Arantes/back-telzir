@@ -13,15 +13,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PlanoServiceImpl implements PlanoService {
 
   public static final BigDecimal TAXA_ADICIONAL = new BigDecimal("1.10");
   public static final Long SEM_PLANO = 1L;
-  private PlanoRepository planoRepository;
-  private ValorPorMinutoRepository valorPorMinutoRepository;
+  private final PlanoRepository planoRepository;
+  private final ValorPorMinutoRepository valorPorMinutoRepository;
 
   @Transactional
   @Override
@@ -35,11 +38,11 @@ public class PlanoServiceImpl implements PlanoService {
 
   @Override
   @Transactional
-  public ValorPorMinutoOutPutDto calculadora(ValorPorMinutoDto dto) {
+  public ValorPorMinutoOutPutDto calculadora(final @NonNull ValorPorMinutoDto dto) {
     final var outPutDto = new ValorPorMinutoOutPutDto();
 
     outPutDto.setTempo(dto.getTempo());
-    outPutDto.setDddDestino(dto.getDddDdestino());
+    outPutDto.setDddDestino(dto.getDddDestino());
     outPutDto.setDddOrigem(dto.getDddOrigem());
 
     final var planoSelecionado =
@@ -50,8 +53,8 @@ public class PlanoServiceImpl implements PlanoService {
     outPutDto.setPlano(planoSelecionado.getNome());
 
     final var taxaNormalDaLigacao =
-        valorPorMinutoRepository.findByDddOrigemDddDestino(dto.getDddOrigem(),
-            dto.getDddDdestino()).orElseThrow(DddOrigemOuDestinoInvalidos::new);
+        valorPorMinutoRepository.findByDddOrigemAndDddDestino(dto.getDddOrigem(),
+            dto.getDddDestino()).orElseThrow(DddOrigemOuDestinoInvalidos::new);
 
     final var resultadoSemPlano =
         taxaNormalDaLigacao.getTaxaNormalPorMinuto().multiply(dto.getTempo());
@@ -76,4 +79,5 @@ public class PlanoServiceImpl implements PlanoService {
     }
     return outPutDto;
   }
+
 }

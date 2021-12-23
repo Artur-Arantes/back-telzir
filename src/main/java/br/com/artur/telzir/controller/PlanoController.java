@@ -9,8 +9,10 @@ import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
 import br.com.artur.telzir.service.PlanoService;
 import java.util.List;
 import javax.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +31,7 @@ public class PlanoController {
 
   @Transactional
   @RequestMapping(method = GET, value = "/busca")
-  public ValorPorMinutoOutPutDto TabelaValoPorMinutoOutPutDto(ValorPorMinutoDto dto) {
+  public ValorPorMinutoOutPutDto busca(final @NonNull @RequestBody ValorPorMinutoDto dto) {
     return service.calculadora(dto);
   }
 }
