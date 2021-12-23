@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ValorPorMinutoRepository extends CrudRepository<TabelaValorPorMinuto, Long> {
 
-  Optional<TabelaValorPorMinuto> findByDddOrigemAndDddDestino(Integer dddOrigem, Integer dddDestino);
+  Optional<TabelaValorPorMinuto> findByDddOrigemAndDddDestino(Integer dddOrigem,
+                                                              Integer dddDestino);
 }

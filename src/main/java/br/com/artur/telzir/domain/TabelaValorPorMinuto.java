@@ -1,6 +1,5 @@
 package br.com.artur.telzir.domain;
 
-import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +22,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Generated
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of = "id")
 public class TabelaValorPorMinuto {
 
   @Id

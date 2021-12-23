@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +25,4 @@ public class ValorPorMinutoDto {
 
   @JsonProperty("id_plan")
   private Long idPlano;
-
-  private BigDecimal taxaNormalPorMinuto;
 }

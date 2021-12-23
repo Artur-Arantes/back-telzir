@@ -1,7 +1,6 @@
 package br.com.artur.telzir.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,4 @@ public class PlanoOutPutDto {
 
   @JsonProperty("id")
   private Long id;
-
-  @JsonProperty("tempoDoPlano")
-  private BigDecimal tempoDoPlano;
 }

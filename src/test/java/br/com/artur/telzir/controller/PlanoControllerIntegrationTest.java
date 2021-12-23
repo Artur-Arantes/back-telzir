@@ -1,13 +1,11 @@
 package br.com.artur.telzir.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import br.com.artur.TelzirContainer;
 import br.com.artur.telzir.domain.dto.PlanoOutPutDto;
 import br.com.artur.telzir.domain.dto.ValorPorMinutoDto;
 import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
-import br.com.artur.telzir.exceptions.DddOrigemOuDestinoInvalidos;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import java.math.BigDecimal;
@@ -70,18 +68,15 @@ public class PlanoControllerIntegrationTest {
       PlanoOutPutDto plano30 = PlanoOutPutDto.builder()
           .id(2L)
           .nome("Plano fale mais 30")
-          .tempoDoPlano(null)
           .build();
 
       PlanoOutPutDto plano60 = PlanoOutPutDto.builder()
           .id(3L)
           .nome("Plano fale mais 60")
-          .tempoDoPlano(null)
           .build();
       PlanoOutPutDto plano120 = PlanoOutPutDto.builder()
           .id(4L)
           .nome("Plano fale mais 120")
-          .tempoDoPlano(null)
           .build();
 
       List<PlanoOutPutDto> faker = new ArrayList<>();
@@ -120,7 +115,6 @@ public class PlanoControllerIntegrationTest {
         ValorPorMinutoDto dto = ValorPorMinutoDto.builder()
             .dddOrigem(11).dddDestino(16).idPlano(2L)
             .tempo(new BigDecimal(40))
-            .taxaNormalPorMinuto(new BigDecimal("1.90"))
             .build();
 
         final var requisicao = RestAssured.given().headers(headers)
@@ -154,7 +148,6 @@ public class PlanoControllerIntegrationTest {
         .dddOrigem(11).dddDestino(16)
         .tempo(new BigDecimal(40))
         .idPlano(1L)
-        .taxaNormalPorMinuto(new BigDecimal("1.90"))
         .build();
 
     final var requisicao = RestAssured.given().headers(headers)
@@ -171,7 +164,6 @@ public class PlanoControllerIntegrationTest {
     ValorPorMinutoDto dto = ValorPorMinutoDto.builder()
         .tempo(new BigDecimal(40))
         .idPlano(2L)
-        .taxaNormalPorMinuto(new BigDecimal("1.90"))
         .build();
 
     final var requisicao = RestAssured.given().headers(headers)
@@ -185,20 +177,19 @@ public class PlanoControllerIntegrationTest {
   @Test
   @DisplayName("testando sucesso sem o plano")
   public void success_sem_plano() {
-      ValorPorMinutoDto dto = ValorPorMinutoDto.builder()
-          .dddOrigem(11).dddDestino(16).idPlano(2L)
-          .tempo(BigDecimal.ZERO)
-          .taxaNormalPorMinuto(new BigDecimal("1.90"))
-          .build();
+    ValorPorMinutoDto dto = ValorPorMinutoDto.builder()
+        .dddOrigem(11).dddDestino(16).idPlano(2L)
+        .tempo(BigDecimal.ZERO)
+        .build();
 
-      final var requisicao = RestAssured.given().headers(headers)
-          .body(dto)
-          .when()
-          .get("api/plano/busca/")
-          .then()
-          .statusCode(HttpStatus.OK.value())
-          .extract().jsonPath()
-          .getObject("", ValorPorMinutoOutPutDto.class);
+    final var requisicao = RestAssured.given().headers(headers)
+        .body(dto)
+        .when()
+        .get("api/plano/busca/")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract().jsonPath()
+        .getObject("", ValorPorMinutoOutPutDto.class);
 
   }
 }

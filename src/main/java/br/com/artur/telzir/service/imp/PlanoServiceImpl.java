@@ -15,10 +15,12 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlanoServiceImpl implements PlanoService {
 
   public static final BigDecimal TAXA_ADICIONAL = new BigDecimal("1.10");
@@ -39,6 +41,7 @@ public class PlanoServiceImpl implements PlanoService {
   @Override
   @Transactional
   public ValorPorMinutoOutPutDto calculadora(final @NonNull ValorPorMinutoDto dto) {
+    log.info("Recebendo Plano: {0}", dto);
     final var outPutDto = new ValorPorMinutoOutPutDto();
 
     outPutDto.setTempo(dto.getTempo());

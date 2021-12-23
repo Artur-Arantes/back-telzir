@@ -12,7 +12,8 @@ import lombok.SneakyThrows;
 @Generated
 public class DddOrigemOuDestinoInvalidos extends RuntimeException {
 
-  private final static String ERROR_MESSAGE = "Ddd de Origem ou destino invalidos ou combinacao invalida";
+  private final static String ERROR_MESSAGE =
+      "Ddd de Origem ou destino invalidos ou combinacao invalida";
 
   @SneakyThrows
   @Override
