@@ -2,7 +2,6 @@ package br.com.artur.telzir.service.imp;
 
 import br.com.artur.telzir.domain.Plano;
 import br.com.artur.telzir.domain.dto.PlanoOutPutDto;
-import br.com.artur.telzir.domain.dto.ValorPorMinutoDto;
 import br.com.artur.telzir.domain.dto.ValorPorMinutoOutPutDto;
 import br.com.artur.telzir.exceptions.DddOrigemOuDestinoInvalidos;
 import br.com.artur.telzir.exceptions.PlanoInvalidoException;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,11 +38,13 @@ public class PlanoServiceImpl implements PlanoService {
 
   @Override
   @Transactional
-  public ValorPorMinutoOutPutDto calculadora(final  Integer dddOrigem,
-                                             final  Integer dddDestino,
-                                             final  BigDecimal tempo, final Long plano) {
-    log.info("Recebendo Plano: {0}", dddOrigem, dddDestino,tempo,plano);
+  public ValorPorMinutoOutPutDto calculadora(final Integer dddOrigem,
+                                             final Integer dddDestino,
+                                             final BigDecimal tempo, final Long plano) {
+    log.info("Recebendo Plano: {0}", dddOrigem, dddDestino, tempo, plano);
     final var outPutDto = new ValorPorMinutoOutPutDto();
+    final var semPlano =
+        planoRepository.findByNome("Sem Plano").orElseThrow(NullPointerException::new);
 
     outPutDto.setTempo(tempo);
     outPutDto.setDddDestino(dddDestino);
@@ -52,7 +52,7 @@ public class PlanoServiceImpl implements PlanoService {
 
     final var planoSelecionado =
         planoRepository.findById(plano)
-            .filter(p -> !plano.equals(SEM_PLANO))
+            .filter(p -> !plano.equals(semPlano.getId()))
             .orElseThrow(PlanoInvalidoException::new);
 
     outPutDto.setPlano(planoSelecionado.getNome());

@@ -191,10 +191,8 @@ public class PlanoControllerIntegrationTest {
         .when()
         .get("api/plano/busca/")
         .then()
-        .statusCode(HttpStatus.OK.value())
-        .extract().jsonPath()
-        .getObject("", ValorPorMinutoOutPutDto.class);
-
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .extract().jsonPath();
   }
 }
 

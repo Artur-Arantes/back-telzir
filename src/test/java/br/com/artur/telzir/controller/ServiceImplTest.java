@@ -4,6 +4,7 @@ package br.com.artur.telzir.controller;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +20,6 @@ import br.com.artur.telzir.service.imp.PlanoServiceImpl;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
-import javax.annotation.meta.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -82,6 +82,7 @@ public class ServiceImplTest {
           .tempo(new BigDecimal("40"))
           .comFaleMais(new BigDecimal("20.9000"))
           .build();
+      when(planoRepository.findByNome(anyString())).thenReturn(Optional.of(plano));
       when(plano.getTempoDoPlano()).thenReturn(new BigDecimal("30"));
       when(planoRepository.findById(2L)).thenReturn(Optional.of(plano));
       when(valorPorMinutoRepository.findByDddOrigemAndDddDestino(any(), any()))
@@ -96,6 +97,7 @@ public class ServiceImplTest {
   public void calculadora_fail() {
     final var plano = mock(Plano.class);
     final var dto = mock(ValorPorMinutoDto.class);
+    when(planoRepository.findByNome(anyString())).thenReturn(Optional.of(plano));
     when(planoRepository.findById(dto.getIdPlano())).thenReturn(Optional.empty());
     assertThatExceptionOfType(PlanoInvalidoException.class).isThrownBy(() ->
         planoService.calculadora(11, 16, BigDecimal.valueOf(40), BigDecimal.ZERO.longValue()));
@@ -105,7 +107,6 @@ public class ServiceImplTest {
   @Test
   @DisplayName("testando ")
   public void calculadora() {
-    String nome = "AnyName";
     final var plano = mock(Plano.class);
     final var dto = mock(ValorPorMinutoDto.class);
     final var valorMin = mock(TabelaValorPorMinuto.class);
@@ -116,6 +117,7 @@ public class ServiceImplTest {
         .tempo(new BigDecimal("30"))
         .comFaleMais(BigDecimal.ZERO)
         .build();
+    when(planoRepository.findByNome(anyString())).thenReturn(Optional.of(plano));
     when(valorMin.getTaxaNormalPorMinuto()).thenReturn(new BigDecimal("1.90"));
     when(plano.getTempoDoPlano()).thenReturn(new BigDecimal("30"));
     when(planoRepository.findById(2L)).thenReturn(Optional.of(plano));
